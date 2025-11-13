@@ -13,6 +13,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./doomemacs-support.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -20,16 +21,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
-  # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -41,28 +32,12 @@
     variant = "dvp";
   };
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # services.pulseaudio.enable = true;
-  # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.kaidong = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     initialPassword = "kaidong";
-    packages = with pkgs; [
-
-    ];
+    shell = pkgs.zsh;
   };
 
   # programs.firefox.enable = true;
@@ -70,7 +45,13 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-    emacs
+    bash # for script expect bash or sh
+    git
+    kitty # terminal emulator, also kitty-terminfo for ssh support
+    spice-autorandr
+    spice-vdagent
+    uutils-coreutils-noprefix # Rusted coreutils, no prefix
+    zsh
   ];
 
   programs.zsh = {
@@ -83,11 +64,30 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  # The lab is run in a trusted network, so we allow password authentication.
+  security.sudo.extraRules = [
+    {
+      users = [ "kaidong" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  ### Custom configurations ###
+
+  nixlab.doomemacs-support.enable = true;
+
+  ### End of custom configurations ###
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

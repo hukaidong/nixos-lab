@@ -40,6 +40,14 @@ Once the VM starts, you can:
 
 3. SSH is enabled, so you can SSH into the VM if needed
 
+   To run the VM with SSH accessible from the host, use:
+
+       QEMU_NET_OPTS=hostfwd=tcp::2222-:22 nix run . --impure
+
+   Then you can SSH into the VM with:
+
+       ssh -p 2222 kaidong@localhost
+
 4. To stop the VM, simply close the QEMU window or shutdown from within
    the system
 
