@@ -38,6 +38,8 @@
           {
             nixlab = {
               trust-auth.enable = true;
+              virtualization.k3s.enable = true;
+              virtualization.k3s.isServer = true;
             };
           }
         ];

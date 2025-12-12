@@ -15,6 +15,7 @@
     ./doomemacs-support.nix
     ./qemu-support.nix
     ./trust-auth.nix
+    ./k3s.nix
   ];
 
   # List packages installed in system profile.
