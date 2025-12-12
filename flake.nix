@@ -8,11 +8,39 @@
   outputs =
     inputs@{ self, nixpkgs, ... }:
     rec {
-      packages.x86_64-linux.default = nixosConfigurations.nixos.config.system.build.vm;
+      packages.x86_64-linux = {
+        default = nixosConfigurations.nixos.config.system.build.vm;
+        digitalOceanImage = nixosConfigurations.digix.config.system.build.digitalOceanImage;
+      };
 
       # NOTE: 'nixos' is the default hostname
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        modules = [ ./configuration.nix ];
+        system = "x86_64-linux";
+        modules = [
+          ./hardware-configuration.nix
+          ./configuration.nix
+          {
+            nixlab = {
+              doomemacs-support.enable = true;
+              trust-auth.enable = true;
+              qemu-support.enable = true;
+            };
+          }
+        ];
+      };
+
+      nixosConfigurations.digix = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          "${nixpkgs}/nixos/modules/virtualisation/digital-ocean-image.nix"
+          ./configuration.nix
+          ./hardware-configuration.nix
+          {
+            nixlab = {
+              trust-auth.enable = true;
+            };
+          }
+        ];
       };
     };
 }

@@ -12,35 +12,10 @@
 {
   imports = [
     # Include the results of the hardware scan.
-    ./hardware-configuration.nix
     ./doomemacs-support.nix
+    ./qemu-support.nix
+    ./trust-auth.nix
   ];
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # networking.hostName = "nixos"; # Define your hostname.
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "dvp";
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.kaidong = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    initialPassword = "kaidong";
-    shell = pkgs.zsh;
-  };
-
-  # programs.firefox.enable = true;
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
@@ -48,8 +23,6 @@
     bash # for script expect bash or sh
     git
     kitty # terminal emulator, also kitty-terminfo for ssh support
-    spice-autorandr
-    spice-vdagent
     uutils-coreutils-noprefix # Rusted coreutils, no prefix
     zsh
   ];
@@ -64,19 +37,6 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # The lab is run in a trusted network, so we allow password authentication.
-  security.sudo.extraRules = [
-    {
-      users = [ "kaidong" ];
-      commands = [
-        {
-          command = "ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
-
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -84,8 +44,6 @@
   # networking.firewall.enable = false;
 
   ### Custom configurations ###
-
-  nixlab.doomemacs-support.enable = true;
 
   ### End of custom configurations ###
 
