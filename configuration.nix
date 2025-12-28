@@ -11,63 +11,27 @@
 
 {
   imports = [
-    # Include the results of the hardware scan.
+    # Non-configurable modules
+    ./hardware-configuration.nix
+    ./customized-zsh.nix
+
+    # Configure-controlled modules
     ./doomemacs-support.nix
     ./qemu-support.nix
-    ./trust-auth.nix
     ./k3s.nix
+    ./trust-auth.nix
   ];
 
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
     bash # for script expect bash or sh
     git
     kitty # terminal emulator, also kitty-terminfo for ssh support
     uutils-coreutils-noprefix # Rusted coreutils, no prefix
-    zsh
-    oh-my-zsh
-    zsh-powerlevel10k
   ];
-
-  programs.zsh = {
-    enable = true;
-    ohMyZsh = {
-      enable = true;
-    };
-    promptInit = "source ''${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  ### Custom configurations ###
-
-  ### End of custom configurations ###
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "25.11"; # Did you read the comment?
+  system.stateVersion = "25.11";
 
 }

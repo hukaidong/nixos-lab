@@ -17,7 +17,6 @@
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./hardware-configuration.nix
           ./configuration.nix
           {
             nixlab = {
@@ -34,7 +33,6 @@
         modules = [
           "${nixpkgs}/nixos/modules/virtualisation/digital-ocean-image.nix"
           ./configuration.nix
-          ./hardware-configuration.nix
           {
             nixlab = {
               trust-auth.enable = true;
