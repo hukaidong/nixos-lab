@@ -26,6 +26,8 @@
     kitty # terminal emulator, also kitty-terminfo for ssh support
     uutils-coreutils-noprefix # Rusted coreutils, no prefix
     zsh
+    oh-my-zsh
+    zsh-powerlevel10k
   ];
 
   programs.zsh = {
@@ -33,6 +35,7 @@
     ohMyZsh = {
       enable = true;
     };
+    promptInit = "source ''${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
   };
 
   # Enable the OpenSSH daemon.
