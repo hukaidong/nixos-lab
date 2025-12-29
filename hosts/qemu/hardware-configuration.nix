@@ -1,4 +1,4 @@
-# This configuration is used for vm only
+# Hardware configuration for QEMU VM
 { lib, ... }:
 
 {

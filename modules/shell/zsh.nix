@@ -1,3 +1,4 @@
+# Zsh shell with Oh My Zsh and Powerlevel10k
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [

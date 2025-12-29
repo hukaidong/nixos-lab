@@ -1,3 +1,4 @@
+# Doom Emacs editor support
 {
   config,
   pkgs,
@@ -6,7 +7,7 @@
 }:
 with lib;
 let
-  cfg = config.nixlab.doomemacs-support;
+  cfg = config.nixlab.editors.doom-emacs;
   install-doomemacs = pkgs.writeShellScriptBin "install-doomemacs" ''
     set -euo pipefail
 
@@ -23,7 +24,7 @@ let
   '';
 in
 {
-  options.nixlab.doomemacs-support = {
+  options.nixlab.editors.doom-emacs = {
     enable = mkEnableOption "Doom Emacs support";
   };
 

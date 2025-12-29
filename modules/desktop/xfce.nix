@@ -1,3 +1,4 @@
+# XFCE desktop environment for QEMU VMs
 {
   lib,
   pkgs,
@@ -6,19 +7,17 @@
 }:
 with lib;
 let
-  cfg = config.nixlab.qemu-support;
+  cfg = config.nixlab.desktop.xfce;
 in
 {
-  options.nixlab.qemu-support = {
-    enable = mkEnableOption "QEMU support";
+  options.nixlab.desktop.xfce = {
+    enable = mkEnableOption "XFCE desktop environment";
   };
 
   config = mkIf cfg.enable {
-    # Enable the X11 windowing system.
     services.xserver.enable = true;
     services.xserver.desktopManager.xfce.enable = true;
 
-    # Configure keymap in X11
     services.xserver.xkb = {
       layout = "us";
       variant = "dvp";

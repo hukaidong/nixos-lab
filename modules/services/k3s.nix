@@ -1,3 +1,4 @@
+# K3s Kubernetes distribution
 {
   config,
   pkgs,
@@ -8,10 +9,10 @@
 with lib;
 
 let
-  cfg = config.nixlab.virtualization.k3s;
+  cfg = config.nixlab.services.k3s;
 in
 {
-  options.nixlab.virtualization.k3s = {
+  options.nixlab.services.k3s = {
     enable = mkEnableOption "K3s Kubernetes distribution";
     isServer = mkOption {
       type = types.bool;

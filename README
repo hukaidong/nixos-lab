@@ -1,0 +1,92 @@
+NIXOS INFRASTRUCTURE REPOSITORY
+-------------------------------------------------------------------------------
+
+This repository serves as a central configuration source for virtual machines
+and cloud infrastructure. It uses NixOS and the Nix flake system to provide
+reproducible, declarative builds for multiple deployment targets.
+
+
+PURPOSE
+-------------------------------------------------------------------------------
+
+The goal is to maintain a single source of truth for machine configurations
+across different environments. Whether spinning up a local development VM or
+deploying to cloud providers, the same modular building blocks are composed
+in different ways to suit each target's requirements.
+
+Local VMs prioritize developer convenience with graphical environments,
+lenient authentication, and development tooling. Cloud deployments prioritize
+security with key-based authentication, minimal attack surface, and services
+appropriate for production workloads.
+
+
+ARCHITECTURE
+-------------------------------------------------------------------------------
+
+The repository follows a layered structure. At the foundation are modules,
+each providing a discrete piece of functionality such as authentication,
+desktop environment, shell configuration, or a particular service. Modules
+are designed to be composable and declare their own options for customization.
+
+Host configurations combine modules for specific deployment targets. Each host
+represents a distinct machine type, whether that is a QEMU virtual machine for
+local development or an image for a particular cloud provider. Hosts import
+the modules they need and set appropriate options.
+
+Profiles offer a convenience layer, bundling common module combinations for
+typical use cases. A development profile might enable a desktop environment
+and relaxed authentication, while a server profile enables hardened auth and
+container orchestration.
+
+The flake serves as the entry point, mapping host configurations to build
+outputs. It defines what can be built and how, without containing the actual
+system configuration logic.
+
+
+EXTENDING THE REPOSITORY
+-------------------------------------------------------------------------------
+
+To add support for a new cloud provider or VM platform, create a new host
+configuration that imports the relevant modules and sets options appropriate
+for that environment. Then register the new host in the flake to expose it
+as a build target.
+
+To add new functionality, create a module with its own options namespace.
+The module should be self-contained and make no assumptions about which
+hosts will use it. Import the module from the appropriate location in the
+module hierarchy, then enable it from host configurations as needed.
+
+Secrets and sensitive data live in a dedicated location separate from
+configuration logic. When modules need access to secrets, they reference
+paths rather than embedding values directly.
+
+
+USAGE
+-------------------------------------------------------------------------------
+
+Build and run the default local VM with nix run. Build specific outputs by
+referencing them through the flake. The QEMU VM persists its disk state
+between runs in a qcow2 image file.
+
+For cloud deployments, build the appropriate image output and upload it to
+the provider. The resulting image contains the complete system configuration
+and boots into the expected state without further provisioning.
+
+
+DESIGN PRINCIPLES
+-------------------------------------------------------------------------------
+
+Configuration should be modular and composable. Each piece of functionality
+lives in one place and can be enabled or disabled independently.
+
+Hosts should be minimal and declarative. They specify what modules to use
+and how to configure them, delegating implementation details to the modules
+themselves.
+
+Security posture varies by environment. Trusted local environments can
+prioritize convenience, while untrusted network deployments must enforce
+strict authentication and access controls. Modules that affect security
+should be mutually exclusive when their assumptions conflict.
+
+The repository should remain maintainable as it grows. New targets and
+capabilities can be added without restructuring existing configurations.
