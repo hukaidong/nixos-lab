@@ -18,6 +18,7 @@
     git
     kitty
     uutils-coreutils-noprefix
+    claude-code
   ];
 
   services.openssh.enable = true;
@@ -29,10 +30,20 @@
     auth.trusted.enable = true;
     desktop.xfce.enable = true;
     editors.doom-emacs.enable = true;
-    services.grocy = {
+    services.sftpgo = {
       enable = true;
-      hostName = "grocy.hukaidong.local";
+      hostNames = {
+        webdav = "dav.hukaidong.local";
+        httpd = "httpd.hukaidong.local";
+      };
     };
-
+    services.nginx.enable = true;
   };
+
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "claude-code"
+      "sftpgo"
+    ];
 }
