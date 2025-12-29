@@ -29,5 +29,9 @@ in
 
   config = mkIf cfg.enable {
     # TODO: Add Nginx configuration here
+    networking.firewall.allowedTCPPorts = [
+      80
+      443
+    ];
   };
 }

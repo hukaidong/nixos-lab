@@ -43,8 +43,11 @@ in
 
           webdavd.bindings = [
             {
-              address = "/run/sftpgo/webdav.sock";
-              port = 0;
+              # Current sftpgo treats ports = 0 as disabled,
+              # so use localhost and a high port as a workaround.
+              # TODO: Switch back to unix socket or port = 0 when this is fixed.
+              address = "127.0.0.1";
+              port = 10080;
             }
           ];
 
@@ -68,7 +71,7 @@ in
         enable = true;
 
         upstreams = {
-          sftpgo-webdav.servers."unix:/run/sftpgo/webdav.sock" = { };
+          sftpgo-webdav.servers."127.0.0.1:10080" = { };
           sftpgo-httpd.servers."unix:/run/sftpgo/httpd.sock" = { };
         };
 
