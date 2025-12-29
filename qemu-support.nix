@@ -14,10 +14,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Use the systemd-boot EFI boot loader.
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-
     # Enable the X11 windowing system.
     services.xserver.enable = true;
     services.xserver.desktopManager.xfce.enable = true;
