@@ -26,6 +26,19 @@
   # Digital Ocean-specific module configuration
   nixlab = {
     auth.secure.enable = true;
+
     services.grocy.enable = true;
+    services.sftpgo.enable = true;
+
+    services.nginx = {
+      enable = true;
+      enableCfSSL = true;
+    };
   };
+
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "sftpgo"
+    ];
 }
