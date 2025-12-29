@@ -29,5 +29,10 @@
     auth.trusted.enable = true;
     desktop.xfce.enable = true;
     editors.doom-emacs.enable = true;
+    services.grocy = {
+      enable = true;
+      hostName = "grocy.hukaidong.local";
+    };
+
   };
 }

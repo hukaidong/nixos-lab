@@ -26,7 +26,6 @@
   # Digital Ocean-specific module configuration
   nixlab = {
     auth.secure.enable = true;
-    services.k3s.enable = true;
-    services.k3s.isServer = true;
+    services.grocy.enable = true;
   };
 }
