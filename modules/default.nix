@@ -6,5 +6,6 @@
     ./shell
     ./editors
     ./services
+    ./secrets
   ];
 }

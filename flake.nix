@@ -3,6 +3,9 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    sops-nix.url = "github:Mic92/sops-nix";
+
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -19,6 +22,7 @@
           system = "x86_64-linux";
           modules = [
             "${nixpkgs}/nixos/modules/virtualisation/qemu-vm.nix"
+            inputs.sops-nix.nixosModules.sops
             ./hosts/qemu
           ];
         };
@@ -28,6 +32,7 @@
           system = "x86_64-linux";
           modules = [
             "${nixpkgs}/nixos/modules/virtualisation/digital-ocean-image.nix"
+            inputs.sops-nix.nixosModules.sops
             ./hosts/digitalocean
           ];
         };
