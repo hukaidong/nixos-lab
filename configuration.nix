@@ -20,6 +20,7 @@
     ./qemu-support.nix
     ./k3s.nix
     ./trust-auth.nix
+    ./secure-auth.nix
   ];
 
   environment.systemPackages = with pkgs; [
