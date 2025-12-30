@@ -16,6 +16,8 @@
     bash
     git
     kitty
+    vim
+    comma
     uutils-coreutils-noprefix
   ];
 
@@ -41,4 +43,15 @@
     builtins.elem (lib.getName pkg) [
       "sftpgo"
     ];
+
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+
+    trusted-public-keys = [
+      "digix-build:MUfI7WSJIrQb+kNaTnVw1mYMeWBvoi0Ovb9eWPc+enM="
+    ];
+  };
 }

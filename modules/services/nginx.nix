@@ -11,14 +11,16 @@ let
   cfg = config.nixlab.services.nginx;
 
   # Generate virtual host config for each protected domain
-  protectedVhosts = listToAttrs (map (domain: {
-    name = domain;
-    value = {
-      forceSSL = true;
-      sslCertificate = config.sops.secrets."cloudflare.oc.cert".path;
-      sslCertificateKey = config.sops.secrets."cloudflare.oc.pem".path;
-    };
-  }) cfg.protectedDomains);
+  protectedVhosts = listToAttrs (
+    map (domain: {
+      name = domain;
+      value = {
+        forceSSL = true;
+        sslCertificate = config.sops.secrets."cloudflare.oc.cert".path;
+        sslCertificateKey = config.sops.secrets."cloudflare.oc.pem".path;
+      };
+    }) cfg.protectedDomains
+  );
 in
 {
   options.nixlab.services.nginx = {
@@ -43,7 +45,7 @@ in
       recommendedTlsSettings = cfg.enableCfSSL;
       recommendedOptimisation = true;
       recommendedGzipSettings = true;
-      recommendedProxySettings = true;
+      recommendedProxySettings = false;
 
       virtualHosts = mkIf cfg.enableCfSSL protectedVhosts;
     };
