@@ -2,7 +2,7 @@
   description = "NixOS VM builds and cloud infrastructure";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     sops-nix.url = "github:Mic92/sops-nix";
 
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
