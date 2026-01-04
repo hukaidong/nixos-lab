@@ -53,5 +53,7 @@
     trusted-public-keys = [
       "digix-build:MUfI7WSJIrQb+kNaTnVw1mYMeWBvoi0Ovb9eWPc+enM="
     ];
+
+    trusted-users = [ "kaidong" ];
   };
 }
