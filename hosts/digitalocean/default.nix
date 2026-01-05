@@ -17,7 +17,7 @@
     git
     kitty
     vim
-    comma
+    btop
     uutils-coreutils-noprefix
   ];
 
