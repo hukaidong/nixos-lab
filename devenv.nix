@@ -15,4 +15,8 @@
   packages = with pkgs; [
     age
   ];
+
+  scripts.deploy.exec = ''
+    nixos-rebuild switch --flake .#digitalocean --target-host digix --use-remote-sudo
+  '';
 }
