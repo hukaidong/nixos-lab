@@ -25,7 +25,11 @@
 
   system.stateVersion = "25.11";
 
-  # Digital Ocean-specific module configuration
+  nix.optimise.automatic = true;
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 7d";
+
+  # digital Ocean-specific module configuration
   nixlab = {
     auth.secure.enable = true;
 
