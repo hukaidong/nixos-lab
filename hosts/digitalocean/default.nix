@@ -11,7 +11,14 @@
     ../../modules
   ];
 
-  # Base system packages
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 4 * 1024; # 4GiB
+    }
+  ];
+
+  # base system packages
   environment.systemPackages = with pkgs; [
     bash
     git
@@ -35,6 +42,13 @@
 
     services.grocy.enable = true;
     services.sftpgo.enable = true;
+    services.open-webui.enable = true;
+    services.open-webui.environment = {
+      RAG_EMBEDDING_ENGINE = "openai";
+      AUDIO_STT_ENIGNE = "webapi";
+      ENABLE_AUTOCOMPLETE_GENERATION = "False";
+      ENABLE_FOLLOW_UP_GENERATION = "False";
+    };
 
     services.nginx = {
       enable = true;
@@ -46,6 +60,7 @@
     pkg:
     builtins.elem (lib.getName pkg) [
       "sftpgo"
+      "open-webui"
     ];
 
   nix.settings = {

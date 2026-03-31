@@ -6,5 +6,6 @@
     ./nginx.nix
     ./sftpgo.nix
     ./journal.nix
+    ./open-webui.nix
   ];
 }
