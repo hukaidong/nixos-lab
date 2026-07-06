@@ -48,8 +48,9 @@ as a build target.
 
 To add new functionality, create a module with its own options namespace.
 The module should be self-contained and make no assumptions about which
-hosts will use it. Import the module from the appropriate location in the
-module hierarchy, then enable it from host configurations as needed.
+hosts will use it. Any nix file placed under the modules directory is
+discovered and imported automatically, so no import list needs updating;
+simply enable the module from host configurations as needed.
 
 Secrets and sensitive data live in a dedicated location separate from
 configuration logic. When modules need access to secrets, they reference
