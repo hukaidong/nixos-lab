@@ -33,11 +33,6 @@ represents a distinct machine type, whether that is a QEMU virtual machine for
 local development or an image for a particular cloud provider. Hosts import
 the modules they need and set appropriate options.
 
-Profiles offer a convenience layer, bundling common module combinations for
-typical use cases. A development profile might enable a desktop environment
-and relaxed authentication, while a server profile enables hardened auth and
-container orchestration.
-
 The flake serves as the entry point, mapping host configurations to build
 outputs. It defines what can be built and how, without containing the actual
 system configuration logic.
