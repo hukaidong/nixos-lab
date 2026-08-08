@@ -14,7 +14,7 @@
   swapDevices = [
     {
       device = "/var/lib/swapfile";
-      size = 4 * 1024; # 4GiB
+      size = 2 * 1024; # 4GiB
     }
   ];
 
@@ -22,7 +22,6 @@
   environment.systemPackages = with pkgs; [
     bash
     git
-    kitty
     vim
     btop
     uutils-coreutils-noprefix
@@ -30,7 +29,7 @@
 
   services.openssh.enable = true;
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 
   nix.optimise.automatic = true;
   nix.gc.automatic = true;
