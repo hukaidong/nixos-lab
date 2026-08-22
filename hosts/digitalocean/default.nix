@@ -14,9 +14,21 @@
   swapDevices = [
     {
       device = "/var/lib/swapfile";
-      size = 2 * 1024; # 4GiB
+      size = 4 * 1024; # 4GiB
     }
   ];
+
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-id/scsi-0DO_Volume_digix-nix-store";
+    fsType = "ext4";
+    options = [
+      "noatime"
+      "discard"
+    ];
+    neededForBoot = true;
+  };
+
+  boot.loader.grub.copyKernels = true;
 
   # base system packages
   environment.systemPackages = with pkgs; [

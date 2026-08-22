@@ -36,6 +36,15 @@
             ./hosts/digitalocean
           ];
         };
+
+        digitalocean-minimum = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            "${nixpkgs}/nixos/modules/virtualisation/digital-ocean-image.nix"
+            inputs.sops-nix.nixosModules.sops
+            ./hosts/digitalocean/minimum
+          ];
+        };
       };
     };
 }
