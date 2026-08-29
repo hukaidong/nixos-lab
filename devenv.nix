@@ -17,7 +17,7 @@
   ];
 
   scripts.deploy.exec = ''
-    nixos-rebuild switch --flake .#digitalocean --target-host digix --ask-sudo-password
+    nixos-rebuild switch --flake .#digitalocean --target-host digix --sudo
   '';
 
   scripts.update.exec = ''
