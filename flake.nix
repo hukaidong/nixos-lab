@@ -10,7 +10,13 @@
 
   outputs =
     inputs@{ self, nixpkgs, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
     rec {
+      devShells.${system}.default = import ./util/shell.nix { inherit pkgs; };
+
       packages.x86_64-linux = {
         default = nixosConfigurations.qemu.config.system.build.vm;
         digitalOceanImage = nixosConfigurations.digitalocean.config.system.build.digitalOceanImage;
