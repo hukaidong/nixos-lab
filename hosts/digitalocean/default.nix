@@ -67,7 +67,7 @@
   nixlab = {
     auth.secure.enable = true;
 
-    services.grocy.enable = true;
+    services.grocy.enable = false;
     services.sftpgo.enable = true;
     services.open-webui.enable = true;
     services.open-webui.environment = {
