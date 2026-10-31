@@ -42,9 +42,9 @@
   services.openssh.enable = true;
 
   # Allow passwordless sudo for the deploy user so remote deploys can run the
-  # two privileged operations nixos-rebuild needs (`nix-env --set` on the
-  # system profile and `systemd-run ... switch-to-configuration`) without an
-  # interactive prompt. Deploy with `--sudo`, not `--ask-sudo-password`.
+  # two privileged operations nh needs (`nix-env --set` on the system profile
+  # and `systemd-run ... switch-to-configuration`) without an interactive
+  # prompt. The `deploy` helper uses `--elevation-strategy passwordless`.
   security.sudo.extraRules = [
     {
       users = [ "kaidong" ];

@@ -9,7 +9,7 @@
 let
   # Helper scripts, replacing the former devenv.nix `scripts.deploy`/`scripts.update`.
   deploy = pkgs.writeShellScriptBin "deploy" ''
-    nixos-rebuild switch --flake .#digitalocean --target-host digix --sudo
+    nh os switch .#digitalocean --target-host digix --elevation-strategy passwordless
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
@@ -29,6 +29,7 @@ pkgs.mkShell {
     age
     cachix
     deadnix
+    nh
     nixd
     statix
     vulnixEnv
@@ -37,6 +38,6 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    echo "NixOS infrastructure shell ready — 'update' refreshes flake.lock, 'deploy' rebuilds digitalocean."
+    echo "NixOS infrastructure shell ready — 'update' refreshes flake.lock, 'deploy' rebuilds digitalocean over SSH via nh."
   '';
 }
