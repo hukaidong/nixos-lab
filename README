@@ -68,6 +68,28 @@ For cloud deployments, build the appropriate image output and upload it to
 the provider. The resulting image contains the complete system configuration
 and boots into the expected state without further provisioning.
 
+VM tests are flake checks. Build one with
+nix build .#checks.x86_64-linux.<name> -L to boot its machines and run it.
+
+
+PRIVATE NETWORK
+-------------------------------------------------------------------------------
+
+The Digital Ocean droplet is the hub of a WireGuard network that gives the
+home machines static addresses (10.77.0.0/24) and names under wg.internal.
+The networking/wireguard module sets up the hub: the tunnel, a DNS server
+for the zone that answers only on the tunnel, and forwarding between peers.
+
+The hosts table in the droplet's host configuration is the address book for
+the whole network. Each machine creates its own private key, and only its
+public key goes in the table; a machine listed without a key gets a name but
+is not let into the tunnel until its key is added. The home machines are
+configured as spokes in the etc-nixos repository, whose wiki page
+WireGuard.md covers the first-time setup and day-to-day checks.
+
+The wireguard check boots the hub, a spoke behind a NAT router and a second
+spoke, and verifies the tunnel, the DNS zone and routing between spokes.
+
 
 DESIGN PRINCIPLES
 -------------------------------------------------------------------------------

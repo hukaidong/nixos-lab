@@ -81,6 +81,29 @@
       enable = true;
       enableCfSSL = true;
     };
+
+    # Private network with the home machines; this droplet is the hub. The
+    # table is the address book for every machine on it (and the
+    # wg.internal DNS zone). A machine's private key is created on that
+    # machine; paste its public key here once it has one.
+    networking.wireguard = {
+      enable = true;
+      self = "digix";
+      hosts = {
+        digix = {
+          address = "10.77.0.1";
+          # Set after the first deploy: `ssh digix sudo wg show wg0 public-key`.
+          # Spokes (etc-nixos) need it; the hub itself ignores it.
+          publicKey = null;
+        };
+        mac-studio = {
+          address = "10.77.0.2";
+          # Printed by `darwin-rebuild switch` on the Mac Studio
+          # (etc-nixos, kaidong-desktop.networking.wireguard).
+          publicKey = null;
+        };
+      };
+    };
   };
 
   nixpkgs.config.allowUnfreePredicate =
