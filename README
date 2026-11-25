@@ -81,9 +81,12 @@ The networking/wireguard module sets up the hub: the tunnel, a DNS server
 for the zone that answers only on the tunnel, and forwarding between peers.
 
 The hosts table in the droplet's host configuration is the address book for
-the whole network. Each machine creates its own private key, and only its
-public key goes in the table; a machine listed without a key gets a name but
-is not let into the tunnel until its key is added. The home machines are
+the whole network. The droplet's own private key is kept with sops as
+wireguard_private_key in secrets/secret.yaml, so it survives a rebuilt
+droplet; edit it with "sops secrets/secret.yaml". Every other machine creates
+its own private key, and only its public key goes in the table; a machine
+listed without a key gets a name but is not let into the tunnel until its
+key is added. The home machines are
 configured as spokes in the etc-nixos repository, whose wiki page
 WireGuard.md covers the first-time setup and day-to-day checks.
 

@@ -132,7 +132,9 @@ in
       default = true;
       description = ''
         Create {option}`privateKeyFile` with `wg genkey` on first start if it
-        does not exist. The key never leaves the machine.
+        does not exist. The key never leaves the machine. Turn this off when
+        the key comes from sops, so a missing secret fails the interface
+        instead of being replaced by a new key.
       '';
     };
 

@@ -74,7 +74,7 @@ in
         nixlab.networking.wireguard = {
           enable = true;
           self = "digix";
-          # The test needs a key known in advance; the droplet generates its own.
+          # A fixed key, as on the droplet (which reads its key from sops).
           generatePrivateKey = false;
           privateKeyFile = "${pkgs.writeText "hub.key" keys.hub.privateKey}";
           hosts = {
