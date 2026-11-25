@@ -81,6 +81,36 @@
       enable = true;
       enableCfSSL = true;
     };
+
+    # The hub's WireGuard private key, kept with sops in secrets/secret.yaml
+    # so it survives a rebuilt droplet.
+    secrets = {
+      enable = true;
+      wireguard.enable = true;
+    };
+
+    # Private network with the home machines; this droplet is the hub. The
+    # table is the address book for every machine on it (and the
+    # wg.internal DNS zone). The hub reads its private key from sops and
+    # never generates one, so a missing secret stops the tunnel instead of
+    # changing its public key. Every other machine creates its own key;
+    # paste its public key here once it has one.
+    networking.wireguard = {
+      enable = true;
+      self = "digix";
+      privateKeyFile = config.sops.secrets."wireguard.key".path;
+      generatePrivateKey = false;
+      hosts = {
+        digix = {
+          address = "10.77.0.1";
+          publicKey = "La77HxNKrh5nw1+rW3lOcvw/vnefyeWyleOs+abFhnI=";
+        };
+        mac-studio = {
+          address = "10.77.0.2";
+          publicKey = "Eka6Bp1F49KjOEd4C8A26IcEcAKILGcjQFfHumO+rVk=";
+        };
+      };
+    };
   };
 
   nixpkgs.config.allowUnfreePredicate =

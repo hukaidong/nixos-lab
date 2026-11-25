@@ -86,6 +86,11 @@
     rec {
       devShells.${system}.default = import ./utils/shell.nix { inherit pkgs; };
 
+      # VM tests: `nix build .#checks.x86_64-linux.<name> -L`
+      checks.${system} = {
+        wireguard = pkgs.testers.runNixOSTest ./tests/wireguard.nix;
+      };
+
       packages.x86_64-linux = {
         default = nixosConfigurations.qemu.config.system.build.vm;
         digitalOceanImage = nixosConfigurations.digitalocean.config.system.build.digitalOceanImage;
