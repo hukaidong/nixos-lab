@@ -14,39 +14,16 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in
-    rec {
+    {
+      nixosConfigurations = import ./hosts inputs;
+
+      packages.${system} = {
+        default = self.nixosConfigurations.qemu.config.system.build.vm;
+        digitalOceanImage = self.nixosConfigurations.digitalocean.config.system.build.digitalOceanImage;
+      };
+
+      checks.${system} = import ./tests { inherit self pkgs; };
+
       devShells.${system}.default = import ./utils/shell.nix { inherit pkgs; };
-
-      # VM tests: `nix build .#checks.x86_64-linux.<name> -L`
-      checks.${system} = {
-        wireguard = pkgs.testers.runNixOSTest ./tests/wireguard.nix;
-      };
-
-      packages.x86_64-linux = {
-        default = nixosConfigurations.qemu.config.system.build.vm;
-        digitalOceanImage = nixosConfigurations.digitalocean.config.system.build.digitalOceanImage;
-      };
-
-      nixosConfigurations = {
-        # Local QEMU development VM
-        qemu = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            "${nixpkgs}/nixos/modules/virtualisation/qemu-vm.nix"
-            inputs.sops-nix.nixosModules.sops
-            ./hosts/qemu
-          ];
-        };
-
-        # Digital Ocean cloud image
-        digitalocean = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            "${nixpkgs}/nixos/modules/virtualisation/digital-ocean-image.nix"
-            inputs.sops-nix.nixosModules.sops
-            ./hosts/digitalocean
-          ];
-        };
-      };
     };
 }

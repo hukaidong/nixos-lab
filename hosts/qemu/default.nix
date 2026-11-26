@@ -10,6 +10,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules
+    ../../profiles/base.nix
   ];
 
   # Base system packages
