@@ -1,6 +1,5 @@
 # QEMU VM host configuration
 {
-  config,
   lib,
   pkgs,
   ...

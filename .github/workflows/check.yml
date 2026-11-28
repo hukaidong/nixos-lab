@@ -1,0 +1,24 @@
+# Evaluates every flake check (each host's system and the VM tests) on every
+# push, and builds the formatting check, which is cheap. Building the hosts and
+# booting the VM tests is left to `nix flake check` on a machine.
+name: check
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Fetches the public inputs with the workflow's own token, which only
+      # raises GitHub's rate limit; no input of this flake is private.
+      - uses: cachix/install-nix-action@v32
+      - name: Evaluate every check
+        run: nix flake check --no-build
+      - name: Check formatting and lints
+        run: nix build --print-build-logs .#checks.x86_64-linux.formatting

@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
@@ -27,7 +26,7 @@ in
   config = mkIf cfg.enable {
     services.grocy = {
       enable = true;
-      hostName = cfg.hostName;
+      inherit (cfg) hostName;
       nginx.enableSSL = false;
     };
 

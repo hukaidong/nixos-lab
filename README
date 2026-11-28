@@ -89,6 +89,12 @@ Every host is a check too (nixos-<host>), so nix flake check --no-build
 evaluates all of them in about a minute; the update command runs it before
 committing a new flake.lock.
 
+Format and lint with nix fmt, which runs deadnix, statix and nixfmt over
+every Nix file (utils/treefmt.nix) and fixes what it can. The formatting
+check fails when nix fmt would change a file or leaves a statix warning it
+cannot fix, such as a key repeated in one attribute set. GitHub Actions runs
+nix flake check --no-build and builds the formatting check on every push.
+
 
 PRIVATE NETWORK
 -------------------------------------------------------------------------------
