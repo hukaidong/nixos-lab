@@ -1,13 +1,18 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    attrValues
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    types
+    ;
+
   cfg = config.nixlab.services.sftpgo;
 in
 {

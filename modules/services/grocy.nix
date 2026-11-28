@@ -1,13 +1,16 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
+
   cfg = config.nixlab.services.grocy;
 in
 {
@@ -23,7 +26,7 @@ in
   config = mkIf cfg.enable {
     services.grocy = {
       enable = true;
-      hostName = cfg.hostName;
+      inherit (cfg) hostName;
       nginx.enableSSL = false;
     };
 

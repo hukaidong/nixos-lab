@@ -1,13 +1,17 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    types
+    ;
+
   cfg = config.nixlab.services.open-webui;
 in
 {
@@ -40,13 +44,13 @@ in
       services.open-webui = {
         enable = true;
         host = "127.0.0.1";
-        port = cfg.port;
+        inherit (cfg) port environmentFile;
         environment = {
           ANONYMIZED_TELEMETRY = "False";
           DO_NOT_TRACK = "True";
           SCARF_NO_ANALYTICS = "True";
-        } // cfg.environment;
-        environmentFile = cfg.environmentFile;
+        }
+        // cfg.environment;
       };
     })
 

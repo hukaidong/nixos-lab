@@ -60,27 +60,27 @@
 
   system.stateVersion = "26.05";
 
-  nix.optimise.automatic = true;
-  nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 7d";
-
   # digital Ocean-specific module configuration
   nixlab = {
     auth.secure.enable = true;
 
-    services.grocy.enable = false;
-    services.sftpgo.enable = true;
-    services.open-webui.enable = true;
-    services.open-webui.environment = {
-      RAG_EMBEDDING_ENGINE = "openai";
-      AUDIO_STT_ENIGNE = "webapi";
-      ENABLE_AUTOCOMPLETE_GENERATION = "False";
-      ENABLE_FOLLOW_UP_GENERATION = "False";
-    };
+    services = {
+      grocy.enable = false;
+      sftpgo.enable = true;
+      open-webui = {
+        enable = true;
+        environment = {
+          RAG_EMBEDDING_ENGINE = "openai";
+          AUDIO_STT_ENIGNE = "webapi";
+          ENABLE_AUTOCOMPLETE_GENERATION = "False";
+          ENABLE_FOLLOW_UP_GENERATION = "False";
+        };
+      };
 
-    services.nginx = {
-      enable = true;
-      enableCfSSL = true;
+      nginx = {
+        enable = true;
+        enableCfSSL = true;
+      };
     };
 
     # The hub's WireGuard private key, kept with sops in secrets/secret.yaml
@@ -121,16 +121,24 @@
       "open-webui"
     ];
 
-  nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+  nix = {
+    optimise.automatic = true;
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 7d";
+    };
 
-    trusted-public-keys = [
-      "digix-build:MUfI7WSJIrQb+kNaTnVw1mYMeWBvoi0Ovb9eWPc+enM="
-    ];
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
 
-    trusted-users = [ "kaidong" ];
+      trusted-public-keys = [
+        "digix-build:MUfI7WSJIrQb+kNaTnVw1mYMeWBvoi0Ovb9eWPc+enM="
+      ];
+
+      trusted-users = [ "kaidong" ];
+    };
   };
 }

@@ -5,8 +5,9 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
+
   cfg = config.nixlab.auth.trusted;
 in
 {

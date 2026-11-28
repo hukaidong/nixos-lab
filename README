@@ -61,6 +61,12 @@ needs updating; simply enable the module from host configurations as needed.
 That only works because a module does nothing until it is enabled: a setting
 that should apply as soon as it is imported belongs in a profile instead.
 
+A module opens with its options, so a reader sees what it does before how.
+Helpers that would push the options down go in a directory named after the
+module, such as modules/networking/wireguard/ next to wireguard.nix. Files
+there are not modules, so they are not imported. Name library functions with
+inherit (lib) rather than a file-wide with lib, so every name's origin shows.
+
 Secrets and sensitive data live in a dedicated location separate from
 configuration logic. When modules need access to secrets, they reference
 paths rather than embedding values directly.
@@ -82,6 +88,12 @@ nix build .#checks.x86_64-linux.<name> -L to boot its machines and run it.
 Every host is a check too (nixos-<host>), so nix flake check --no-build
 evaluates all of them in about a minute; the update command runs it before
 committing a new flake.lock.
+
+Format and lint with nix fmt, which runs deadnix, statix and nixfmt over
+every Nix file (utils/treefmt.nix) and fixes what it can. The formatting
+check fails when nix fmt would change a file or leaves a statix warning it
+cannot fix, such as a key repeated in one attribute set. GitHub Actions runs
+nix flake check --no-build and builds the formatting check on every push.
 
 
 PRIVATE NETWORK

@@ -5,8 +5,9 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
+
   cfg = config.nixlab.editors.doom-emacs;
   install-doomemacs = pkgs.writeShellScriptBin "install-doomemacs" ''
     set -euo pipefail

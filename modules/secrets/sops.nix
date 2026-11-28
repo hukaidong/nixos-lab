@@ -1,14 +1,12 @@
 # SOPS secrets management
 {
   config,
-  pkgs,
   lib,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib) mkEnableOption mkIf mkMerge;
+
   cfg = config.nixlab.secrets;
 in
 {

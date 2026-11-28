@@ -5,8 +5,9 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
+
   cfg = config.nixlab.desktop.xfce;
 in
 {
@@ -15,12 +16,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.enable = true;
-    services.xserver.desktopManager.xfce.enable = true;
+    services.xserver = {
+      enable = true;
+      desktopManager.xfce.enable = true;
 
-    services.xserver.xkb = {
-      layout = "us";
-      variant = "dvp";
+      xkb = {
+        layout = "us";
+        variant = "dvp";
+      };
     };
 
     environment.systemPackages = with pkgs; [
