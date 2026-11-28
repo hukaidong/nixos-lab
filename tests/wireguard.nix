@@ -8,57 +8,9 @@
 # a second spoke with a public address. The hub knows neither endpoint.
 #
 # Run with `nix build .#checks.x86_64-linux.wireguard -L`.
-{ lib, ... }:
-
 let
-  # Throwaway keys for this test only; never use them anywhere else.
-  keys = {
-    hub = {
-      privateKey = "kIhU5bcK+3UWgZ3uTDSUtnlqvmxtUGyrP9h3VYTD4Ho=";
-      publicKey = "LjJ6u0v9nKL/EbjN/E+ekULSGfBZ0uJfc30JlRqs9Gw=";
-    };
-    mac = {
-      privateKey = "2JK6EuaxAzBW1A06PFlmqMoQ0Ey48rS1nYK0O00BHnY=";
-      publicKey = "NnwvZ74Y0FSiN/78ZzSYDXMwM07phJKDCBULwb2h0h0=";
-    };
-    laptop = {
-      privateKey = "EElrZzfPyHy+WDxtmweQR2gL6JTORCJ1JD8SKdW+lWc=";
-      publicKey = "WXrkCQwHNC3Z9f4MtfhYpub5DbkE5PGvpa/3UR8v7Rw=";
-    };
-  };
-
-  # A spoke as the etc-nixos darwin module configures one.
-  spoke =
-    {
-      address,
-      key,
-      vlan,
-      gateway ? null,
-    }:
-    { pkgs, ... }:
-    {
-      virtualisation.vlans = [ vlan ];
-      networking.useDHCP = false;
-      networking.defaultGateway = lib.mkIf (gateway != null) gateway;
-
-      networking.wg-quick.interfaces.wg0 = {
-        address = [ "${address}/24" ];
-        privateKeyFile = "${pkgs.writeText "spoke.key" key.privateKey}";
-        peers = [
-          {
-            inherit (keys.hub) publicKey;
-            endpoint = "192.168.1.1:51820";
-            allowedIPs = [ "10.77.0.0/24" ];
-            persistentKeepalive = 25;
-          }
-        ];
-      };
-
-      environment.systemPackages = [
-        pkgs.dig
-        pkgs.wireguard-tools
-      ];
-    };
+  keys = import ./wireguard/keys.nix;
+  spoke = import ./wireguard/spoke.nix;
 in
 {
   name = "nixlab-wireguard";

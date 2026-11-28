@@ -4,10 +4,15 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    listToAttrs
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
+
   cfg = config.nixlab.services.nginx;
 
   # Generate virtual host config for each protected domain

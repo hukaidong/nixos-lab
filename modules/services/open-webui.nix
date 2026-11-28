@@ -4,10 +4,9 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib) mkEnableOption mkIf mkMerge mkOption types;
+
   cfg = config.nixlab.services.open-webui;
 in
 {
