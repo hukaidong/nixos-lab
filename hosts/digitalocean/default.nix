@@ -9,6 +9,7 @@
 {
   imports = [
     ../../modules
+    ../../profiles/base.nix
   ];
 
   swapDevices = [

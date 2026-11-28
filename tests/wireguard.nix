@@ -4,7 +4,7 @@
 #   vlan 2 ("home LAN"): mac 192.168.2.3, router 192.168.2.4 (NAT to vlan 1)
 #
 # `mac` stands in for the Mac Studio: a wg-quick spoke behind NAT, set up like
-# etc-nixos' darwin/networking/wireguard.nix sets up the real one. `laptop` is
+# etc-nixos' modules/darwin/networking/wireguard.nix sets up the real one. `laptop` is
 # a second spoke with a public address. The hub knows neither endpoint.
 #
 # Run with `nix build .#checks.x86_64-linux.wireguard -L`.

@@ -28,14 +28,21 @@ each providing a discrete piece of functionality such as authentication,
 desktop environment, shell configuration, or a particular service. Modules
 are designed to be composable and declare their own options for customization.
 
-Host configurations combine modules for specific deployment targets. Each host
-represents a distinct machine type, whether that is a QEMU virtual machine for
-local development or an image for a particular cloud provider. Hosts import
-the modules they need and set appropriate options.
+Profiles sit beside the modules. A profile has no options: importing it is
+what turns its settings on, so hosts name the profiles they use, and
+profiles/base.nix collects the ones every host takes. Modules, by contrast,
+change nothing until a host enables them, which is why every module is
+imported into every host.
+
+Host configurations combine modules and profiles for specific deployment
+targets. Each host represents a distinct machine type, whether that is a QEMU
+virtual machine for local development or an image for a particular cloud
+provider. Hosts import the profiles they need and set module options.
 
 The flake serves as the entry point, mapping host configurations to build
-outputs. It defines what can be built and how, without containing the actual
-system configuration logic.
+outputs. It lists what can be built and points to the files that build it
+(hosts/default.nix, tests/default.nix, utils/shell.nix), without containing
+the actual system configuration logic.
 
 
 EXTENDING THE REPOSITORY
@@ -43,14 +50,16 @@ EXTENDING THE REPOSITORY
 
 To add support for a new cloud provider or VM platform, create a new host
 configuration that imports the relevant modules and sets options appropriate
-for that environment. Then register the new host in the flake to expose it
-as a build target.
+for that environment. Then add the new host to hosts/default.nix to expose it
+as a build target; it becomes a flake check as well.
 
 To add new functionality, create a module with its own options namespace.
 The module should be self-contained and make no assumptions about which
 hosts will use it. Any nix file placed under the modules directory is
-discovered and imported automatically, so no import list needs updating;
-simply enable the module from host configurations as needed.
+discovered and imported into every host automatically, so no import list
+needs updating; simply enable the module from host configurations as needed.
+That only works because a module does nothing until it is enabled: a setting
+that should apply as soon as it is imported belongs in a profile instead.
 
 Secrets and sensitive data live in a dedicated location separate from
 configuration logic. When modules need access to secrets, they reference
@@ -70,6 +79,9 @@ and boots into the expected state without further provisioning.
 
 VM tests are flake checks. Build one with
 nix build .#checks.x86_64-linux.<name> -L to boot its machines and run it.
+Every host is a check too (nixos-<host>), so nix flake check --no-build
+evaluates all of them in about a minute; the update command runs it before
+committing a new flake.lock.
 
 
 PRIVATE NETWORK

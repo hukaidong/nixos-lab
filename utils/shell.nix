@@ -12,8 +12,10 @@ let
     nh os switch .#digitalocean --target-host digix --elevation-strategy passwordless
   '';
 
+  # Evaluates every check (each host included) before committing, so a lock
+  # bump that breaks a host is never pushed.
   update = pkgs.writeShellScriptBin "update" ''
-    nix flake update && git commit -am "chore: Update flake.lock" && git push
+    nix flake update && nix flake check --no-build && git commit -am "chore: Update flake.lock" && git push
   '';
 
   # Wrapping vulnix in a buildEnv prevents mkShell from overriding the Nix
